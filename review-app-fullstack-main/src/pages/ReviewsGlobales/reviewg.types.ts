@@ -4,6 +4,5 @@ export interface Review {
   genero: string;
   calificacion: number;
   comentario: string;
-  email: string;
+  usuarioemail: string;
 }
-

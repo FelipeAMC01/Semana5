@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import type { Review } from "./review.types";
 import { crearReview, actualizarReview } from "./review.service";
+import { useAuth } from "../../context/AuthContext";
 
 interface Props {
   onClose: () => void;
@@ -9,6 +10,8 @@ interface Props {
 }
 
 export const ModalReview = ({ onClose, review }: Props) => {
+  const { usuario } = useAuth();
+
   const {
     register,
     handleSubmit,
@@ -25,18 +28,20 @@ export const ModalReview = ({ onClose, review }: Props) => {
 
   const onSubmit = async (data: Omit<Review, "id">) => {
     try {
-      const dataConCalificacionNumero = {
+      const dataConUsuario = {
         ...data,
         calificacion: Number(data.calificacion),
+        usuarioEmail: usuario?.email || "",
       };
 
       if (review) {
-        await actualizarReview(review.id, dataConCalificacionNumero);
+        await actualizarReview(review.id, dataConUsuario);
         toast.success("Review actualizada", { autoClose: 2000 });
       } else {
-        await crearReview(dataConCalificacionNumero);
+        await crearReview(dataConUsuario);
         toast.success("Review creada", { autoClose: 2000 });
       }
+
       reset();
       onClose();
     } catch (err) {
@@ -54,13 +59,13 @@ export const ModalReview = ({ onClose, review }: Props) => {
           <input
             type="text"
             placeholder="Nombre del videojuego"
-            className="w-full bg-gray-800 text-white border border-gray-600 px-3 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-gray-800 text-white border border-gray-600 px-3 py-2 rounded-xl"
             {...register("nombre", { required: "Campo requerido" })}
           />
           <input
             type="text"
             placeholder="Género"
-            className="w-full bg-gray-800 text-white border border-gray-600 px-3 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-gray-800 text-white border border-gray-600 px-3 py-2 rounded-xl"
             {...register("genero", { required: "Campo requerido" })}
           />
           <input
@@ -68,7 +73,7 @@ export const ModalReview = ({ onClose, review }: Props) => {
             min={1}
             max={10}
             placeholder="Calificación (1-10)"
-            className="w-full bg-gray-800 text-white border border-gray-600 px-3 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-gray-800 text-white border border-gray-600 px-3 py-2 rounded-xl"
             {...register("calificacion", {
               required: true,
               min: 1,
@@ -78,7 +83,7 @@ export const ModalReview = ({ onClose, review }: Props) => {
           <textarea
             rows={4}
             placeholder="Comentario"
-            className="w-full bg-gray-800 text-white border border-gray-600 px-3 py-2 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full bg-gray-800 text-white border border-gray-600 px-3 py-2 rounded-xl"
             {...register("comentario", { required: "Comentario requerido" })}
           ></textarea>
 
@@ -102,3 +107,5 @@ export const ModalReview = ({ onClose, review }: Props) => {
     </div>
   );
 };
+
+

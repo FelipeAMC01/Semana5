@@ -11,6 +11,7 @@ import { PrivateRoute } from "./routes/PrivateRoutes";
 import { Login } from "./pages/Login/Login";
 import { Layout } from "./components/Layout";
 import { Reviews } from "./pages/Reviews/Reviews";
+import { ReviewsGlobales } from "./pages/ReviewsGlobales/ReviewsGlobales";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
           >
             <Route index element={<Navigate to="/reviews" />} />
             <Route path="/reviews" element={<Reviews />} />
+            <Route path="/reviews-globales" element={<ReviewsGlobales />} />
           </Route>
 
           <Route path="*" element={<Navigate to="/" />} />
@@ -39,3 +41,5 @@ function App() {
 }
 
 export default App;
+
+
